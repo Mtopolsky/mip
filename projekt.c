@@ -115,6 +115,90 @@ void U(N **I){
 			}
 }
 
+void V(N **I){
+	int K=0,L=0,i,j,k;
+	char s[52],c[52];
+	N *G=(*I)->H;
+	N *J=*I;
+		gets(s);
+		gets(s);
+		printf("%s.\n",s);
+		for(i=0;i<strlen(s);i++){
+			s[i]=tolower(s[i]);	
+		}
+		
+	while (J!=NULL){	
+			strcpy(c,J->B);
+			for(i=0;i<strlen(c);i++){
+				c[i]=tolower(c[i]);	
+			}
+			i=0;
+			while(c[i]!='\0'){
+				if(c[i]==s[0]){
+					j=0;k=0;
+					for(j=i;j<=j+strlen(s);j++){
+						if (c[j]!=s[k]){
+							break;	
+						}
+						k++;
+					}
+					if (k==strlen(s)) {
+						K=1;
+						break;
+					}
+				}
+			i++;
+			}
+			if(K==1) {
+				L++;	
+				*I=(*I)->H;
+				free(J);
+				J=*I;
+				K=0;
+			} else {
+				G=*I;
+				break;
+				}					
+}
+
+if (J!=NULL)
+	while (G!=NULL){
+		strcpy(c,G->B);
+		for(i=0;i<strlen(c);i++){
+			c[i]=tolower(c[i]);	
+		}
+		i=0;
+		while(c[i]!='\0'){
+			if(c[i]==s[0]){
+				j=0;k=0;
+				for(j=i;j<=j+strlen(s);j++){
+					if (c[j]!=s[k]){
+						break;	
+					}
+					k++;
+				}
+				if (k==strlen(s)) {
+					K=1;
+					break;
+				}
+			}
+		i++;
+		}
+		if(K==1) {	
+			L++;	
+			J->H = G->H;
+	  		free (G); 		
+	  		G = J->H;
+	  		K=0;
+		}
+		else{
+			J = G;
+	  		G = G->H;
+		}
+	}
+		printf("Vymazalo sa %d zaznamov\n",L);		
+}
+
 int main (){
 char c;
 N *I=NULL;
@@ -132,7 +216,12 @@ while ((c=getchar())!='k'){
 	if (c=='p') {
 		U(&I); 
 		continue;
-	}	
+	}
+	if (c=='z') {
+		if ((I)==NULL) printf("Vymazalo sa 0 zaznamov\n");
+		 else V(&I); 
+		continue;
+	}
 }	
   return 0;
 }
