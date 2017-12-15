@@ -3,57 +3,57 @@
 #include <string.h>
 #include <ctype.h>
 
-struct M{
-char A [52];
-char B [52];
-char C [102];
-int D;
-int E;
-char F [202];
-struct M *H;
+struct polozkaa{
+char kategoria [52];
+char znacka [52];
+char predajca [102];
+int cena;
+int rok_vyroby;
+char stav_vozidla [202];
+struct polozkaa *dalsi;
 };
 
-typedef struct M N ;
+typedef struct polozkaa polozka ;
 
-N* S(){
+polozka* S(){
 	FILE *fr;
 	int O=0;
 	char c;
-	N *I,*G;
+	polozka *I,*G;
 		if ((fr=fopen("auta.txt","r")) == NULL){
 				printf("Zaznamy neboli nacitane\n");
 				return NULL;
 		}
 
-	I=(N*) malloc (sizeof(N));
+	I=(polozka*) malloc (sizeof(polozka));
 	c=fgetc(fr);
 	if (c=='$')O++;
 	fgetc(fr);
-	fgets (I->A,52,fr);
-	fgets (I->B,52,fr);
-	fgets (I->C,102,fr);
-	fscanf (fr,"%d",&I->D);
-	fscanf (fr,"%d\n",&I->E);
-	fgets (I->F,202,fr);
+	fgets (I->kategoria,52,fr);
+	fgets (I->znacka,52,fr);
+	fgets (I->predajca,102,fr);
+	fscanf (fr,"%d",&I->cena);
+	fscanf (fr,"%d\n",&I->rok_vyroby);
+	fgets (I->stav_vozidla,202,fr);
 	c=fgetc(fr);
 	fgetc(fr);
-   I->H=NULL;
+   I->dalsi=NULL;
    G=I;
 
    	   while (c=='$') 
    	   {
    	   		O++;
-   		   G->H=(N*) malloc (sizeof(N));	
-   		   G=G->H;
-   		   fgets (G->A,52,fr);
-   		   fgets (G->B,52,fr);
-   		   fgets (G->C,102,fr);
-   		   fscanf (fr,"%d",&G->D);
-   		   fscanf (fr,"%d\n",&G->E);
-   		   fgets (G->F,202,fr);
+   		   G->dalsi=(polozka*) malloc (sizeof(polozka));	
+   		   G=G->dalsi;
+   		   fgets (G->kategoria,52,fr);
+   		   fgets (G->znacka,52,fr);
+   		   fgets (G->predajca,102,fr);
+   		   fscanf (fr,"%d",&G->cena);
+   		   fscanf (fr,"%d\n",&G->rok_vyroby);
+   		   fgets (G->stav_vozidla,202,fr);
    		   c=fgetc(fr);
    		   fgetc(fr);
-   		   G->H=NULL;
+   		   G->dalsi=NULL;
    	   }
 
    fclose(fr);
@@ -61,65 +61,65 @@ N* S(){
  return I; 
 }
 
-void T(N *I){
-	N *G=I;
+void T(polozka *I){
+	polozka *G=I;
 	int x=0;
 	 while (G!=NULL)
 	    {
 	    x++;
 	      printf ("%d.\n",x);
-	      printf("A: %s",G->A);
-	      printf("B: %s",G->B);
-	      printf("C: %s",G->C);
-	      printf("D: %d\n",G->D);
-	      printf("E: %d\n",G->E);
-	      printf("F: %s",G->F);
-	      G=G->H; 
+	      printf("kategoria: %s",G->kategoria);
+	      printf("znacka: %s",G->znacka);
+	      printf("predajca: %s",G->predajca);
+	      printf("cena: %d\n",G->cena);
+	      printf("rok_vyroby: %d\n",G->rok_vyroby);
+	      printf("stav_vozidla: %s",G->stav_vozidla);
+	      G=G->dalsi; 
 	    }
 }
 
-void U(N **I){
-	N *G,*P;
-	P=(N*) malloc (sizeof(N));
+void U(polozka **I){
+	polozka *G,*P;
+	P=(polozka*) malloc (sizeof(polozka));
 	int R=0;
 	scanf("%d\n",&R);
-	gets(P->A);
-	strcat (P->A,"\n");
-	gets(P->B);
-	strcat (P->B,"\n");
-	gets(P->C);
-	strcat (P->C,"\n");
-	scanf("%d\n",&(P->D));
-	scanf("%d\n",&(P->E));
-	gets(P->F);
-	strcat (P->F,"\n");	
+	gets(P->kategoria);
+	strcat (P->kategoria,"\n");
+	gets(P->znacka);
+	strcat (P->znacka,"\n");
+	gets(P->predajca);
+	strcat (P->predajca,"\n");
+	scanf("%d\n",&(P->cena));
+	scanf("%d\n",&(P->rok_vyroby));
+	gets(P->stav_vozidla);
+	strcat (P->stav_vozidla,"\n");	
 	if (*I==NULL) {
 	*I=P;
-	P->H=NULL;					
+	P->dalsi=NULL;					
 	}
 		else 
 			if (R==1){
-				P->H=*I;
+				P->dalsi=*I;
 				*I=P;			
 			} 
 			else{ 
 			G= *I;
 			int i;
 			for (i=0;i<R-2;i++)	
-				if (G->H!=NULL) G=G->H;
+				if (G->dalsi!=NULL) G=G->dalsi;
 			if (i>=R-2){
-				P->H=G->H;
-				G->H=P;	
+				P->dalsi=G->dalsi;
+				G->dalsi=P;	
 			}
-			else G->H=P;	
+			else G->dalsi=P;	
 			}
 }
 
-void V(N **I){
+void V(polozka **I){
 	int K=0,L=0,i,j,k;
 	char s[52],c[52];
-	N *G=(*I)->H;
-	N *J=*I;
+	polozka *G=(*I)->dalsi;
+	polozka *J=*I;
 		gets(s);
 		gets(s);
 		printf("%s.\n",s);
@@ -128,7 +128,7 @@ void V(N **I){
 		}
 		
 	while (J!=NULL){	
-			strcpy(c,J->B);
+			strcpy(c,J->znacka);
 			for(i=0;i<strlen(c);i++){
 				c[i]=tolower(c[i]);	
 			}
@@ -151,7 +151,7 @@ void V(N **I){
 			}
 			if(K==1) {
 				L++;	
-				*I=(*I)->H;
+				*I=(*I)->dalsi;
 				free(J);
 				J=*I;
 				K=0;
@@ -163,7 +163,7 @@ void V(N **I){
 
 if (J!=NULL)
 	while (G!=NULL){
-		strcpy(c,G->B);
+		strcpy(c,G->znacka);
 		for(i=0;i<strlen(c);i++){
 			c[i]=tolower(c[i]);	
 		}
@@ -186,50 +186,50 @@ if (J!=NULL)
 		}
 		if(K==1) {	
 			L++;	
-			J->H = G->H;
+			J->dalsi = G->dalsi;
 	  		free (G); 		
-	  		G = J->H;
+	  		G = J->dalsi;
 	  		K=0;
 		}
 		else{
 			J = G;
-	  		G = G->H;
+	  		G = G->dalsi;
 		}
 	}
 		printf("Vymazalo sa %d zaznamov\n",L);		
 }
 
-void W(N *I){
-N *G=I;
+void W(polozka *I){
+polozka *G=I;
 int y,x=0;
 	scanf("%d",&y);
 	while (G!=NULL)		
 		{
-			if ((G->D)<=y){
+			if ((G->cena)<=y){
 			x++;
 	      	printf ("%d.\n",x);
-	     	printf("A: %s",G->A);
-	      	printf("B: %s",G->B);
-	      	printf("C: %s",G->C);
-	      	printf("D: %d\n",G->D);
-	      	printf("E: %d\n",G->E);
-	      	printf("F: %s",G->F);	
+	     	printf("kategoria: %s",G->kategoria);
+	      	printf("znacka: %s",G->znacka);
+	      	printf("predajca: %s",G->predajca);
+	      	printf("cena: %d\n",G->cena);
+	      	printf("rok_vyroby: %d\n",G->rok_vyroby);
+	      	printf("stav_vozidla: %s",G->stav_vozidla);	
 			} 
-	     	G=G->H;
+	     	G=G->dalsi;
 	    }
 	if(x==0) printf("V ponuke su len auta s vyssou cenou\n"); 
 }
 
-void X(N *I){
-N *G=I;
+void X(polozka *I){
+polozka *G=I;
 char s[52],c[52];
 int x=0,y=0,i;
-char A [52];
-char B [52];
-char C [102];
-int D;
-int E;
-char F [202];
+char kategoria [52];
+char znacka [52];
+char predajca [102];
+int cena;
+int rok_vyroby;
+char stav_vozidla [202];
 	for (i=0;i<52;i++){
 		s[i]='\0';
 		c[i]='\0';
@@ -238,37 +238,37 @@ char F [202];
 	gets(c);
 	printf("%s.\n",c);
 	scanf("%d\n",&x);	
-	gets(A);
-	strcat (A,"\n");
-	gets(B);
-	strcat (B,"\n");
-	gets(C);
-	strcat (C,"\n");
-	scanf("%d\n",&D);
-	scanf("%d\n",&E);
-	gets(F);
-	strcat (F,"\n");	
+	gets(kategoria);
+	strcat (kategoria,"\n");
+	gets(znacka);
+	strcat (znacka,"\n");
+	gets(predajca);
+	strcat (predajca,"\n");
+	scanf("%d\n",&cena);
+	scanf("%d\n",&rok_vyroby);
+	gets(stav_vozidla);
+	strcat (stav_vozidla,"\n");	
 	while (G!=NULL)
 		{ 
-		strcpy(s,G->B);
+		strcpy(s,G->znacka);
 		for(i=0;i<=strlen(c);i++) if(c[i]!=s[i]) break;
-			if ((i==(strlen(c)))&&(x==(G->D))){
+			if ((i==(strlen(c)))&&(x==(G->cena))){
 				y++;
-				strcpy(G->A,A);
-				strcpy(G->B,B);
-				strcpy(G->C,C);
-				G->D=D;
-				G->E=E;
-				strcpy(G->F,F);	
+				strcpy(G->kategoria,kategoria);
+				strcpy(G->znacka,znacka);
+				strcpy(G->predajca,predajca);
+				G->cena=cena;
+				G->rok_vyroby=rok_vyroby;
+				strcpy(G->stav_vozidla,stav_vozidla);	
 			}
-	     	G=G->H;	
+	     	G=G->dalsi;	
 	    }
 	printf("Aktualizovalo sa %d zaznamov\n",y);
 }
 
 int main (){
 char c;
-N *I=NULL;
+polozka *I=NULL;
 while ((c=getchar())!='k'){
 	if (c=='n') {
 		if (I!=NULL) 
@@ -293,7 +293,7 @@ while ((c=getchar())!='k'){
 		W(I); 
 		continue;
 	}	
-	if (c=='a') {
+	if (c=='kategoria') {
 		if ((I)==NULL) printf("Aktualizovalo sa 0 zaznamov\n");
 		 else X(I); 
 		continue;
