@@ -15,155 +15,155 @@ struct polozkaa *dalsi;
 
 typedef struct polozkaa polozka ;
 
-polozka* S(){
+polozka* vytvorenie_zoznamu(){
 	FILE *fr;
-	int O=0;
+	int mnozstvo_zaznamov=0;
 	char c;
-	polozka *I,*G;
+	polozka *zaznam,*pom;
 		if ((fr=fopen("auta.txt","r")) == NULL){
 				printf("Zaznamy neboli nacitane\n");
-				return NULL;
+				return NULL;//ak sa subor neda otvorit tak vypisem oznam a vratim hodnotu NULL.
 		}
 
-	I=(polozka*) malloc (sizeof(polozka));
+	zaznam=(polozka*) malloc (sizeof(polozka));//dynamicky si alokujem prvu strukturu
 	c=fgetc(fr);
-	if (c=='$')O++;
+	if (c=='$')mnozstvo_zaznamov++;//pocitam si pocet zaznamov
 	fgetc(fr);
-	fgets (I->kategoria,52,fr);
-	fgets (I->znacka,52,fr);
-	fgets (I->predajca,102,fr);
-	fscanf (fr,"%d",&I->cena);
-	fscanf (fr,"%d\n",&I->rok_vyroby);
-	fgets (I->stav_vozidla,202,fr);
+	fgets (zaznam->kategoria,52,fr);
+	fgets (zaznam->znacka,52,fr);
+	fgets (zaznam->predajca,102,fr);
+	fscanf (fr,"%d",&zaznam->cena);
+	fscanf (fr,"%d\n",&zaznam->rok_vyroby);
+	fgets (zaznam->stav_vozidla,202,fr); //nacitam do nej udaje zo suboru
 	c=fgetc(fr);
 	fgetc(fr);
-   I->dalsi=NULL;
-   G=I;
+   zaznam->dalsi=NULL;
+   pom=zaznam;
 
-   	   while (c=='$') 
+   	   while (c=='$') //ak je v subore dalsi zaznam, tak vykonam nasledujuci cyklus
    	   {
-   	   		O++;
-   		   G->dalsi=(polozka*) malloc (sizeof(polozka));	
-   		   G=G->dalsi;
-   		   fgets (G->kategoria,52,fr);
-   		   fgets (G->znacka,52,fr);
-   		   fgets (G->predajca,102,fr);
-   		   fscanf (fr,"%d",&G->cena);
-   		   fscanf (fr,"%d\n",&G->rok_vyroby);
-   		   fgets (G->stav_vozidla,202,fr);
+   	   		mnozstvo_zaznamov++;
+   		   pom->dalsi=(polozka*) malloc (sizeof(polozka));	//alokujem si strukturu na smernik v predchadzajucej strukture  
+   		   pom=pom->dalsi;
+   		   fgets (pom->kategoria,52,fr);
+   		   fgets (pom->znacka,52,fr);
+   		   fgets (pom->predajca,102,fr);
+   		   fscanf (fr,"%d",&pom->cena);
+   		   fscanf (fr,"%d\n",&pom->rok_vyroby);
+   		   fgets (pom->stav_vozidla,202,fr);//nacitam si do struktury udaje zo suboru
    		   c=fgetc(fr);
    		   fgetc(fr);
-   		   G->dalsi=NULL;
+   		   pom->dalsi=NULL;
    	   }
 
-   fclose(fr);
-   printf("Nacitalo sa %d zaznamov \n",O);
- return I; 
+   fclose(fr);//zavrem subor
+   printf("Nacitalo sa %d zaznamov \n",mnozstvo_zaznamov);//vypsiem oznam
+ return zaznam; //vratim smernik ukazujuci na zaciatok spajaneho zoznamu struktur
 }
 
-void T(polozka *I){
-	polozka *G=I;
+void vypisanie_zoznamu(polozka *zaznam){
+	polozka *pom=zaznam;
 	int x=0;
-	 while (G!=NULL)
+	 while (pom!=NULL)
 	    {
 	    x++;
 	      printf ("%d.\n",x);
-	      printf("kategoria: %s",G->kategoria);
-	      printf("znacka: %s",G->znacka);
-	      printf("predajca: %s",G->predajca);
-	      printf("cena: %d\n",G->cena);
-	      printf("rok_vyroby: %d\n",G->rok_vyroby);
-	      printf("stav_vozidla: %s",G->stav_vozidla);
-	      G=G->dalsi; 
-	    }
+	      printf("kategoria: %s",pom->kategoria);
+	      printf("znacka: %s",pom->znacka);
+	      printf("predajca: %s",pom->predajca);
+	      printf("cena: %d\n",pom->cena);
+	      printf("rok_vyroby: %d\n",pom->rok_vyroby);
+	      printf("stav_vozidla: %s",pom->stav_vozidla);
+	      pom=pom->dalsi; 
+	    }//postupne vypisujem obsah struktur na standartny vystup
 }
 
-void U(polozka **I){
-	polozka *G,*P;
-	P=(polozka*) malloc (sizeof(polozka));
-	int R=0;
-	scanf("%d\n",&R);
-	gets(P->kategoria);
-	strcat (P->kategoria,"\n");
-	gets(P->znacka);
-	strcat (P->znacka,"\n");
-	gets(P->predajca);
-	strcat (P->predajca,"\n");
-	scanf("%d\n",&(P->cena));
-	scanf("%d\n",&(P->rok_vyroby));
-	gets(P->stav_vozidla);
-	strcat (P->stav_vozidla,"\n");	
-	if (*I==NULL) {
-	*I=P;
-	P->dalsi=NULL;					
+void pridanie_zaznamu(polozka **zaznam){
+	polozka *pom,*novy;
+	novy=(polozka*) malloc (sizeof(polozka));//alokujem si novy strukturu
+	int pozicia=0;
+	scanf("%d\n",&pozicia);
+	gets(novy->kategoria);
+	strcat (novy->kategoria,"\n");
+	gets(novy->znacka);
+	strcat (novy->znacka,"\n");
+	gets(novy->predajca);
+	strcat (novy->predajca,"\n");
+	scanf("%d\n",&(novy->cena));
+	scanf("%d\n",&(novy->rok_vyroby));
+	gets(novy->stav_vozidla);
+	strcat (novy->stav_vozidla,"\n");	//nacitam si do nej udaje z standartneho vstupu a za kazdy udaj doplnim znak \n
+	if (*zaznam==NULL) {
+	*zaznam=novy;
+	novy->dalsi=NULL;					//ak spajany zaznam struktur neexistuje, tak tato struktura sa stane prvou strukturou v spajanom zozname struktur
 	}
 		else 
-			if (R==1){
-				P->dalsi=*I;
-				*I=P;			
+			if (pozicia==1){
+				novy->dalsi=*zaznam;	//ak spajany zoznam struktur existuje a umiestnujem tuto strukturu na prvu poziciu
+				*zaznam=novy;			// tak smernik z tejto strukury poslem na spajany zoznam a smernik zo zaciatku zoznamu poslem na tuto strukturu
 			} 
 			else{ 
-			G= *I;
+			pom= *zaznam;
 			int i;
-			for (i=0;i<R-2;i++)	
-				if (G->dalsi!=NULL) G=G->dalsi;
-			if (i>=R-2){
-				P->dalsi=G->dalsi;
-				G->dalsi=P;	
+			for (i=0;i<pozicia-2;i++)	//ak strukturu umiestujem na inu poziciu do existujuceho spajaneho zoznamu struktur
+				if (pom->dalsi!=NULL) pom=pom->dalsi;//nastavim si pomocny smernik pom na strukturu za ktoru budem pridavat novu strukturu
+			if (i>=pozicia-2){
+				novy->dalsi=pom->dalsi;//na smernik z novej struktury umiestnim zvysok spajaneho zoznamu struktur
+				pom->dalsi=novy;		//novu strukturu umiestnim za strukturu na ktoru ukazuje pomocny smernik
 			}
-			else G->dalsi=P;	
+			else pom->dalsi=novy;		//ak som prisiel na koniec zoznamu a zadana pozicia sa v zozname nenachadza tak strukturu umiestnim na koniec	
 			}
 }
 
-void V(polozka **I){
-	int K=0,L=0,i,j,k;
+void vymazanie_zaznamu(polozka **zaznam){
+	int zhoda=0,pocet_vymazanych=0,i,j,k;
 	char s[52],c[52];
-	polozka *G=(*I)->dalsi;
-	polozka *J=*I;
+	polozka *pom=(*zaznam)->dalsi;
+	polozka *predosli=*zaznam;
 		gets(s);
 		gets(s);
 		printf("%s.\n",s);
 		for(i=0;i<strlen(s);i++){
-			s[i]=tolower(s[i]);	
+			s[i]=tolower(s[i]);			//string z vstupu upravym na male pismena
 		}
 		
-	while (J!=NULL){	
-			strcpy(c,J->znacka);
+	while (predosli!=NULL){				//tento cyklus je prvu poziciu v spajanom zozname struktur
+			strcpy(c,predosli->znacka);
 			for(i=0;i<strlen(c);i++){
-				c[i]=tolower(c[i]);	
+				c[i]=tolower(c[i]);		//string z struktury upravim na male pismena
 			}
 			i=0;
-			while(c[i]!='\0'){
+			while(c[i]!='\0'){			//robim cyklus po charoch do konca nacitaneho stringu
 				if(c[i]==s[0]){
 					j=0;k=0;
 					for(j=i;j<=j+strlen(s);j++){
-						if (c[j]!=s[k]){
+						if (c[j]!=s[k]){	//zistujem ci sa chary rovnaju, ak nie break-nem cyklus
 							break;	
 						}
 						k++;
 					}
-					if (k==strlen(s)) {
-						K=1;
+					if (k==strlen(s)) {	//ak ma string zo vstupu dlzku k a mam zhodnych k charov po sebe tak je najdena zhoda
+						zhoda=1;
 						break;
 					}
 				}
 			i++;
 			}
-			if(K==1) {
-				L++;	
-				*I=(*I)->dalsi;
-				free(J);
-				J=*I;
-				K=0;
+			if(zhoda==1) {
+				pocet_vymazanych++;	
+				*zaznam=(*zaznam)->dalsi;
+				free(predosli);
+				predosli=*zaznam;
+				zhoda=0;
 			} else {
-				G=*I;
-				break;
+				pom=*zaznam;
+				break;	//ak nemazem prvu poziciu break-nem tento cyklus a prejdem na dalsi	
 				}					
 }
-
-if (J!=NULL)
-	while (G!=NULL){
-		strcpy(c,G->znacka);
+				
+if (predosli!=NULL)	//tento cyklus je pre zvysok spajaneho zoznamu struktur
+	while (pom!=NULL){
+		strcpy(c,pom->znacka);
 		for(i=0;i<strlen(c);i++){
 			c[i]=tolower(c[i]);	
 		}
@@ -178,50 +178,50 @@ if (J!=NULL)
 					k++;
 				}
 				if (k==strlen(s)) {
-					K=1;
+					zhoda=1;
 					break;
 				}
 			}
 		i++;
 		}
-		if(K==1) {	
-			L++;	
-			J->dalsi = G->dalsi;
-	  		free (G); 		
-	  		G = J->dalsi;
-	  		K=0;
+		if(zhoda==1) {			//ak mam zhodu, idem vymazat danu strukturu, poslem si smernik  na nasledujucu strukturu
+			pocet_vymazanych++;	
+			predosli->dalsi = pom->dalsi;
+	  		free (pom); 		
+	  		pom = predosli->dalsi;
+	  		zhoda=0;
 		}
 		else{
-			J = G;
-	  		G = G->dalsi;
+			predosli = pom;
+	  		pom = pom->dalsi;
 		}
 	}
-		printf("Vymazalo sa %d zaznamov\n",L);		
+		printf("Vymazalo sa %d zaznamov\n",pocet_vymazanych);		
 }
 
-void W(polozka *I){
-polozka *G=I;
+void hladanie_zaznamov(polozka *zaznam){
+polozka *pom=zaznam;
 int y,x=0;
 	scanf("%d",&y);
-	while (G!=NULL)		
+	while (pom!=NULL)				//prehladavam cely zoznam spajanych struktur
 		{
-			if ((G->cena)<=y){
+			if ((pom->cena)<=y){	//ak plati podmienka tak danu strukturu vypisem na standartny vystup
 			x++;
 	      	printf ("%d.\n",x);
-	     	printf("kategoria: %s",G->kategoria);
-	      	printf("znacka: %s",G->znacka);
-	      	printf("predajca: %s",G->predajca);
-	      	printf("cena: %d\n",G->cena);
-	      	printf("rok_vyroby: %d\n",G->rok_vyroby);
-	      	printf("stav_vozidla: %s",G->stav_vozidla);	
+	     	printf("kategoria: %s",pom->kategoria);
+	      	printf("znacka: %s",pom->znacka);
+	      	printf("predajca: %s",pom->predajca);
+	      	printf("cena: %d\n",pom->cena);
+	      	printf("rok_vyroby: %d\n",pom->rok_vyroby);
+	      	printf("stav_vozidla: %s",pom->stav_vozidla);	
 			} 
-	     	G=G->dalsi;
+	     	pom=pom->dalsi;
 	    }
 	if(x==0) printf("V ponuke su len auta s vyssou cenou\n"); 
 }
 
-void X(polozka *I){
-polozka *G=I;
+void aktualizacia_zaznamu(polozka *zaznam){
+polozka *pom=zaznam;
 char s[52],c[52];
 int x=0,y=0,i;
 char kategoria [52];
@@ -247,61 +247,61 @@ char stav_vozidla [202];
 	scanf("%d\n",&cena);
 	scanf("%d\n",&rok_vyroby);
 	gets(stav_vozidla);
-	strcat (stav_vozidla,"\n");	
-	while (G!=NULL)
+	strcat (stav_vozidla,"\n");		//nacitam si do lokalnych premennych udaje zo vstupu
+	while (pom!=NULL)
 		{ 
-		strcpy(s,G->znacka);
+		strcpy(s,pom->znacka);
 		for(i=0;i<=strlen(c);i++) if(c[i]!=s[i]) break;
-			if ((i==(strlen(c)))&&(x==(G->cena))){
-				y++;
-				strcpy(G->kategoria,kategoria);
-				strcpy(G->znacka,znacka);
-				strcpy(G->predajca,predajca);
-				G->cena=cena;
-				G->rok_vyroby=rok_vyroby;
-				strcpy(G->stav_vozidla,stav_vozidla);	
+			if ((i==(strlen(c)))&&(x==(pom->cena))){	//prehladavam spajany zoznam struktur, ak nejaka vyhovuje podmienkam
+				y++;									// tak do nej nahram udaje z premennych 
+				strcpy(pom->kategoria,kategoria);
+				strcpy(pom->znacka,znacka);
+				strcpy(pom->predajca,predajca);
+				pom->cena=cena;
+				pom->rok_vyroby=rok_vyroby;
+				strcpy(pom->stav_vozidla,stav_vozidla);	
 			}
-	     	G=G->dalsi;	
+	     	pom=pom->dalsi;	
 	    }
 	printf("Aktualizovalo sa %d zaznamov\n",y);
 }
 
 int main (){
 char c;
-polozka *I=NULL;
+polozka *zaznam=NULL;
 while ((c=getchar())!='k'){
 	if (c=='n') {
-		if (I!=NULL) 
-			free(I);
-		I=S();
+		if (zaznam!=NULL) //ak uz existuje spajany zoznam struktur tak ho odstranim z pamäte
+			free(zaznam);
+		zaznam=vytvorenie_zoznamu();
 		continue;
 	}
 	if (c=='v') {
-		T(I);
+		vypisanie_zoznamu(zaznam);
 		continue;
 	}	
 	if (c=='p') {
-		U(&I); 
+		pridanie_zaznamu(&zaznam); 
 		continue;
 	}	
 	if (c=='z') {
-		if ((I)==NULL) printf("Vymazalo sa 0 zaznamov\n");
-		 else V(&I); 
+		if ((zaznam)==NULL) printf("Vymazalo sa 0 zaznamov\n");
+		 else vymazanie_zaznamu(&zaznam); 
 		continue;
 	}
 	if (c=='h') {
-		W(I); 
+		hladanie_zaznamov(zaznam); 
 		continue;
 	}	
-	if (c=='kategoria') {
-		if ((I)==NULL) printf("Aktualizovalo sa 0 zaznamov\n");
-		 else X(I); 
+	if (c=='a') {
+		if ((zaznam)==NULL) printf("Aktualizovalo sa 0 zaznamov\n");
+		 else aktualizacia_zaznamu(zaznam); 
 		continue;
 	}
 }
 if (c=='k')
-	if (I!=NULL) 
-		free(I);
+	if (zaznam!=NULL) 
+		free(zaznam);
 
 return 0;
 }
