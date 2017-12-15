@@ -199,6 +199,73 @@ if (J!=NULL)
 		printf("Vymazalo sa %d zaznamov\n",L);		
 }
 
+void W(N *I){
+N *G=I;
+int y,x=0;
+	scanf("%d",&y);
+	while (G!=NULL)		
+		{
+			if ((G->D)<=y){
+			x++;
+	      	printf ("%d.\n",x);
+	     	printf("A: %s",G->A);
+	      	printf("B: %s",G->B);
+	      	printf("C: %s",G->C);
+	      	printf("D: %d\n",G->D);
+	      	printf("E: %d\n",G->E);
+	      	printf("F: %s",G->F);	
+			} 
+	     	G=G->H;
+	    }
+	if(x==0) printf("V ponuke su len auta s vyssou cenou\n"); 
+}
+
+void X(N *I){
+N *G=I;
+char s[52],c[52];
+int x=0,y=0,i;
+char A [52];
+char B [52];
+char C [102];
+int D;
+int E;
+char F [202];
+	for (i=0;i<52;i++){
+		s[i]='\0';
+		c[i]='\0';
+	}
+	gets(c);
+	gets(c);
+	printf("%s.\n",c);
+	scanf("%d\n",&x);	
+	gets(A);
+	strcat (A,"\n");
+	gets(B);
+	strcat (B,"\n");
+	gets(C);
+	strcat (C,"\n");
+	scanf("%d\n",&D);
+	scanf("%d\n",&E);
+	gets(F);
+	strcat (F,"\n");	
+	while (G!=NULL)
+		{ 
+		strcpy(s,G->B);
+		for(i=0;i<=strlen(c);i++) if(c[i]!=s[i]) break;
+			if ((i==(strlen(c)))&&(x==(G->D))){
+				y++;
+				strcpy(G->A,A);
+				strcpy(G->B,B);
+				strcpy(G->C,C);
+				G->D=D;
+				G->E=E;
+				strcpy(G->F,F);	
+			}
+	     	G=G->H;	
+	    }
+	printf("Aktualizovalo sa %d zaznamov\n",y);
+}
+
 int main (){
 char c;
 N *I=NULL;
@@ -212,16 +279,29 @@ while ((c=getchar())!='k'){
 	if (c=='v') {
 		T(I);
 		continue;
-  	}
+	}	
 	if (c=='p') {
 		U(&I); 
 		continue;
-	}
+	}	
 	if (c=='z') {
 		if ((I)==NULL) printf("Vymazalo sa 0 zaznamov\n");
 		 else V(&I); 
 		continue;
 	}
-}	
-  return 0;
+	if (c=='h') {
+		W(I); 
+		continue;
+	}	
+	if (c=='a') {
+		if ((I)==NULL) printf("Aktualizovalo sa 0 zaznamov\n");
+		 else X(I); 
+		continue;
+	}
+}
+if (c=='k')
+	if (I!=NULL) 
+		free(I);
+
+return 0;
 }
